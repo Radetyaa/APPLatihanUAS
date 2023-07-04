@@ -7,6 +7,7 @@ use Jenssegers\Blade\Blade;
 use Orm\Post;
 use Orm\User;
 
+
 class Welcome extends CI_Controller
 {
     /**
@@ -41,7 +42,7 @@ class Welcome extends CI_Controller
     public function index()
     {
         $avail_user = User::all();
-        $this->_createView('form', ['avail_user' => $avail_user]);
+        $this->_createView('form',['avail_user' => $avail_user]);
     }
 
     public function simpan()
@@ -49,26 +50,43 @@ class Welcome extends CI_Controller
         $user_id = $this->input->post('username');
         $artikel = $this->input->post('artikel');
 
-        $post= new Post();
-        $post->user_id =$user_id;
-        $post->artikel =$artikel;
+       
+
+        $post = new Post();
+        $post->user_id = $user_id;
+        $post->artikel = $artikel;
         $post->save();
 
-        $this->_createView('tampil',[]);
+        redirect('Welcome/tampil');
     }
 
-    public function hapus()
+    public function hapus($id)
     {
-        $this->_createView('hapus', []);
+        $post = Post::find($id);
+        $post->delete();
+
+        redirect('Welcome/tampil');
     }
 
-    public function ubah()
+    public function ubah($id)
     {
-        $this->_createView('update', []);
+        $avail_user = User::all();
+        $post = Post::find($id);
+        $this->_createView('update', ['post' => $post,'avail_user' =>$avail_user]);
+    }
+
+    public function update($id){
+        $post = Post::find($id);
+        $post->user_id = $this->input->post('username');
+        $post->artikel = $this->input->post('artikel');
+        $post->save();
+
+        redirect('Welcome/tampil');
     }
 
     public function tampil()
     {
-        $this->_createView('tampil', []);
+        $post_list = Post::all();
+        $this->_createView('tampil', ['post_list' => $post_list]);
     }
 }

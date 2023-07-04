@@ -3,7 +3,6 @@ namespace Orm;
 
 use Illuminate\Database\Eloquent\Model;
 
-class  User extends Model{
-protected $table = 'user';
-
+class User extends Model{
+    protected $table ='user';
 }
